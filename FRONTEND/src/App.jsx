@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaGavel, FaPaperPlane, FaLightbulb, FaBalanceScale, FaUserAlt, FaRobot } from 'react-icons/fa';
+import { FaGavel, FaPaperPlane, FaLightbulb, FaBalanceScale, FaUserAlt, FaRobot, FaInfoCircle } from 'react-icons/fa';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { BounceLoader } from 'react-spinners';
 import TypewriterEffect from 'react-typist-component';
 import './App.css';
@@ -138,6 +139,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showWelcome, setShowWelcome] = useState(true);
+  const [activeCard, setActiveCard] = useState(null);
   const chatEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -174,7 +176,7 @@ function App() {
     setQuestion(''); // Clear input immediately for better UX
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/ask', {
+      const response = await fetch('http://127.0.0.1:8800/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question }),
@@ -209,6 +211,16 @@ function App() {
     }
   };
 
+  const handleNewChat = () => {
+    setHistory([]);
+    setQuestion('');
+    setShowWelcome(true);
+    setError('');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -231,72 +243,107 @@ function App() {
     }
   };
 
-  // Random legal facts for the sidebar
+  const buttonVariants = {
+    hover: { 
+      scale: 1.05,
+      boxShadow: "0 6px 16px rgba(26, 35, 126, 0.2)",
+      transition: { type: "spring", stiffness: 400 }
+    },
+    tap: { 
+      scale: 0.95,
+      transition: { type: "spring", stiffness: 400 }
+    }
+  };
+
+  // Legal facts for the sidebar
   const legalFacts = [
-    "The concept of 'due process' originates from the Magna Carta of 1215.",
-    "The world's oldest known legal code is the Code of Ur-Nammu from around 2100 BCE.",
-    "In the US, the Supreme Court has overturned more than 200 of its own precedents.",
-    "The term 'attorney' comes from the French word 'atourner' meaning 'to appoint'.",
-    "Saudi Arabia's legal system is based on Sharia law and has no written penal code.",
-    "Roman law serves as the foundation for many modern legal systems worldwide.",
+    "The Supreme Court of India has the power to review its own judgments.",
+    "The Indian Constitution is the world's longest written constitution.",
+    "The first law school in India was established in 1855 in Calcutta.",
+    "The Indian Penal Code was drafted in 1860 and came into effect in 1862.",
+    "The first woman judge of the Supreme Court of India was appointed in 1989.",
+    "The Right to Information Act was passed in 2005, revolutionizing transparency.",
   ];
 
   // Select a random legal fact
   const randomFact = legalFacts[Math.floor(Math.random() * legalFacts.length)];
 
   return (
-    <div className="app-container">
-      <nav className="navbar">
+    <motion.div 
+      className="app-container"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.nav 
+        className="navbar"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: "spring", stiffness: 100 }}
+      >
         <div className="navbar-container">
           <motion.div 
             className="logo-container"
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <FaBalanceScale className="logo-icon" />
             <span className="logo-text">LawGPT</span>
             <span className="logo-subtitle">Legal Case Research Assistant</span>
           </motion.div>
         </div>
-      </nav>
+      </motion.nav>
 
       <div className="main-content">
         <div className="container">
           {/* Sidebar */}
-          <div className="sidebar">
+          <motion.div 
+            className="sidebar"
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
+          >
             <div className="sidebar-content">
-              {/* Did You Know Section */}
-              <div className="sidebar-section">
-                <h3><FaLightbulb /> Did You Know?</h3>
-                <p>{randomFact}</p>
+              <div className="sidebar-sections">
+                {/* Did You Know Section */}
+                <div className="sidebar-section">
+                  <h3><FaLightbulb /> Did You Know?</h3>
+                  <p>{randomFact}</p>
+                </div>
+
+                {/* Legal Tips Section */}
+                <div className="sidebar-section">
+                  <h3><FaBalanceScale /> Legal Tips</h3>
+                  <ul>
+                    <motion.li whileHover={{ x: 5 }}>Be specific in your legal questions</motion.li>
+                    <motion.li whileHover={{ x: 5 }}>Include relevant jurisdiction information</motion.li>
+                    <motion.li whileHover={{ x: 5 }}>Mention timeframes if applicable</motion.li>
+                  </ul>
+                </div>
               </div>
 
-              {/* Legal Tips Section */}
-              <div className="sidebar-section">
-                <h3><FaBalanceScale /> Legal Tips</h3>
-                <ul>
-                  <motion.li whileHover={{ x: 5 }}>Be specific in your legal questions</motion.li>
-                  <motion.li whileHover={{ x: 5 }}>Include relevant jurisdiction information</motion.li>
-                  <motion.li whileHover={{ x: 5 }}>Mention timeframes if applicable</motion.li>
-                </ul>
-              </div>
-
-
-              {/* Call to Action Button */}
-              <div className="sidebar-cta">
+              {/* Call to Action Button Container */}
+              <div className="sidebar-button-container">
                 <motion.button
                   className="sidebar-button"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => inputRef.current?.focus()}
+                  variants={buttonVariants}
                 >
-                  Ask a Question Now
+                  <FaPaperPlane /> Ask a Legal Question
                 </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Chat Container */}
-          <div className="chat-container">
+          <motion.div 
+            className="chat-container"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
             {/* Chat Messages Area */}
             <div className="messages-container">
               <AnimatePresence>
@@ -308,21 +355,26 @@ function App() {
                     animate="visible"
                     exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
                   >
-                    <div className="welcome-icon">
+                    <motion.div 
+                      className="welcome-icon"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+                    >
                       <FaGavel size={40} />
-                    </div>
+                    </motion.div>
                     <motion.h2 
                       className="welcome-title"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
                     >
                       Welcome to LawGPT Assistant
                     </motion.h2>
                     <motion.div
                       className="welcome-message"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
                     >
                       <TypewriterEffect 
@@ -347,13 +399,18 @@ function App() {
                       className="user-message"
                       layoutId={`question-${item.id || idx}`}
                     >
-                      <div className="avatar user-avatar">
+                      <motion.div 
+                        className="avatar user-avatar"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                      >
                         <FaUserAlt />
-                      </div>
+                      </motion.div>
                       <motion.div 
                         className="message-bubble user-bubble"
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
+                        initial={{ scale: 0.9, opacity: 0, x: 20 }}
+                        animate={{ scale: 1, opacity: 1, x: 0 }}
                         transition={{ type: "spring", stiffness: 500 }}
                       >
                         {item.question}
@@ -365,15 +422,21 @@ function App() {
                       className="assistant-message"
                       layoutId={`answer-${item.id || idx}`}
                     >
-                      <div className="avatar assistant-avatar">
+                      <motion.div 
+                        className="avatar assistant-avatar"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                      >
                         <FaRobot />
-                      </div>
+                      </motion.div>
                       
                       {item.loading ? (
                         <motion.div 
                           className="message-bubble assistant-bubble loading-bubble"
-                          initial={{ scale: 0.9, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
+                          initial={{ scale: 0.9, opacity: 0, x: -20 }}
+                          animate={{ scale: 1, opacity: 1, x: 0 }}
+                          transition={{ type: "spring", stiffness: 500 }}
                         >
                           <BounceLoader color="#1a237e" size={24} />
                           <span className="loading-text">Thinking...</span>
@@ -381,8 +444,8 @@ function App() {
                       ) : (
                         <motion.div 
                           className={`message-bubble assistant-bubble ${item.isError ? 'error-bubble' : ''}`}
-                          initial={{ scale: 0.9, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
+                          initial={{ scale: 0.9, opacity: 0, x: -20 }}
+                          animate={{ scale: 1, opacity: 1, x: 0 }}
                           transition={{ type: "spring", stiffness: 500 }}
                         >
                           {item.answer}
@@ -399,19 +462,22 @@ function App() {
             <motion.form 
               className="input-container"
               onSubmit={handleAsk}
-              style={{
-                position: 'sticky',
-                bottom: 0,
-                background: 'white',
-                padding: '20px',
-                borderTop: '1px solid #e0e6ff',
-                borderRadius: '16px',
-                boxShadow: '0 -4px 20px rgba(0,0,0,0.05)',
-                display: 'flex',
-                gap: '16px',
-                margin: '0 -20px',
-              }}
+              initial={{ y: 100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 100, delay: 0.4 }}
             >
+              <motion.button
+                type="button"
+                className="new-chat-button"
+                onClick={handleNewChat}
+                whileHover={{ scale: 1.05, rotate: 90 }}
+                whileTap={{ scale: 0.95 }}
+                title="Start New Chat"
+                variants={buttonVariants}
+              >
+                <AddBoxIcon style={{ fontSize: 32 }} />
+              </motion.button>
+              
               <motion.input
                 ref={inputRef}
                 type="text"
@@ -419,41 +485,16 @@ function App() {
                 onChange={e => setQuestion(e.target.value)}
                 placeholder="Type your legal question..."
                 disabled={loading}
-                style={{
-                  flex: 1,
-                  padding: '16px 24px',
-                  fontSize: '16px',
-                  color: '#1a237e',
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #e0e6ff',
-                  borderRadius: '12px',
-                  outline: 'none',
-                  transition: 'all 0.2s ease',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
-                  '::placeholder': {
-                    color: '#9fa8da',
-                  },
-                }}
+                whileFocus={{ scale: 1.02 }}
               />
+              
               <motion.button
                 type="submit"
                 disabled={loading || !question.trim()}
-                style={{
-                  padding: '0 32px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  color: '#ffffff',
-                  backgroundColor: loading ? '#ccc' : '#1a237e',
-                  border: 'none',
-                  borderRadius: '12px',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                className="send-button"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                variants={buttonVariants}
               >
                 {loading ? (
                   <BounceLoader color="#fff" size={16} />
@@ -464,10 +505,10 @@ function App() {
                 )}
               </motion.button>
             </motion.form>
-          </div>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
