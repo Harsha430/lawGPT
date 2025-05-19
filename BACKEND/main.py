@@ -6,6 +6,7 @@ import sys
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from services.vector_db_service import load_vector_db
 from config.settings import (
     DEFAULT_PDF_PATH, BOOKS_DIR, API_PORT, API_HOST
 )
@@ -37,32 +38,14 @@ def init_app():
     
     return app
 
-def load_pdf():
+def load_db():
     """Load and process the PDF file"""
     global retriever, docs
-    
-    # Check if PDF exists, otherwise use a default from the books directory
-    pdf_path = DEFAULT_PDF_PATH
-    if not os.path.exists(pdf_path):
-        # Try to find a PDF in the books directory
-        if os.path.exists(BOOKS_DIR):
-            pdf_files = [f for f in os.listdir(BOOKS_DIR) if f.endswith('.pdf')]
-            if pdf_files:
-                pdf_path = os.path.join(BOOKS_DIR, pdf_files[0])
-                print_colored(f"Using PDF from books directory: {pdf_path}", "yellow")
-    
-    # Process the PDF and create vector database
-    print_colored(f"Processing PDF: {pdf_path}", "yellow")
-    from services.pdf_service import process_pdf
-    docs, pdf_hash = process_pdf(pdf_path)
-    
-    if docs and pdf_hash:
-        # Create or load vector database and retriever
-        from services.vector_db_service import create_or_load_vector_db
-        retriever, _ = create_or_load_vector_db(docs, pdf_hash)
-        if retriever:
-            print_colored("✓ System ready to process questions", "green")
-            return True
+
+    retriever, _ = load_vector_db("db/faiss_index")
+    if retriever:
+        print_colored("✓ System ready to process questions", "green")
+        return True
     
     print_colored("Failed to initialize system", "red")
     return False
@@ -77,7 +60,7 @@ if os.environ.get("INITIALIZE_APP", "true").lower() == "true":
     app = init_app()
     
     # Load PDF at startup - this needs to happen before the app starts
-    if not load_pdf():
+    if not load_db():
         print_colored("Error: Could not load PDF or initialize vector database", "red")
         sys.exit(1)
 else:
