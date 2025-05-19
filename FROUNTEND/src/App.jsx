@@ -176,7 +176,7 @@ function App() {
     setQuestion(''); // Clear input immediately for better UX
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/ask', {
+      const response = await fetch('http://127.0.0.1:8800/api/ask', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question }),
