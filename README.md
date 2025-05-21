@@ -1,139 +1,73 @@
-# Legal Research Assistant
+# 🧠 LawGPT – Legal Research Assistant (2023 Updated)
 
-An intelligent legal research system that combines PDF document analysis and web search capabilities to provide comprehensive legal information and answers.
+**LawGPT** is an AI-powered legal support system designed to assist **law students**, **researchers**, and **legal professionals** in conducting efficient and accurate legal research. The system combines real-time web search with intelligent conversational capabilities to deliver up-to-date legal information based on the latest available laws and case studies (2023).
 
-## 🌟 Features
+🌐 **Live Project**: [https://lawgpt.tuxn.tech](https://lawgpt.tuxn.tech)  
+📺 *Best viewed on desktop for an enhanced visual experience*
 
-- **Dual-Agent System**
+---
 
-  - PDF-based analysis for local legal documents
-  - Web search integration for current legal information
-  - Intelligent fallback mechanism for comprehensive answers
+## 🚀 Features
 
-- **Modern User Interface**
+- ⚖️ **GPT-powered Legal Research**
+- 🌍 **Live Web Search Integration** for real-time legal queries
+- 💬 **Chat-Based UI** with conversation memory
+- 🎯 **Context-Aware Responses**
+- 🖥️ **Responsive Design** with smooth user experience
 
-  - Clean, responsive React frontend
-  - Real-time chat interface
-  - Helpful sidebar with legal tips
-  - Professional gradient styling
+---
 
-- **Smart Document Processing**
-  - PDF document analysis
-  - Context-aware responses
-  - Conversation history management
+## 📸 Screenshots
 
-## 🔧 Technology Stack
+> *(Add screenshots of the interface here once available)*  
+> For example: login screen, chat interface, search response, etc.
 
-### Frontend
+---
 
-- React with Vite
-- Modern CSS with animations
-- Responsive design principles
+## 👥 Team
 
-### Backend
+- 👨‍💻 **Ambati Jaya Charan** – Developer  
+- 🛠️ **Venkata Anand Sai Kumar Narla** – Deployment & Infrastructure
 
-- Python FastAPI server
-- PDF processing capabilities
-- DuckDuckGo integration for web search
-- Conversation state management
+---
 
-## 📋 Prerequisites
+## 📌 Use Cases
 
-- Python 3.10 or higher
-- Node.js 14.0 or higher
-- npm or yarn package manager
+- Legal research for academic purposes  
+- Exploring statutes, case laws, and legal principles  
+- Assisting law students in understanding legal topics  
+- Supporting professionals with fast, reliable information access
 
-## 🚀 Getting Started
+---
 
-1. **Clone the repository**
+## 📎 How to Use
 
-   ```powershell
-   git clone [repository-url]
-   cd law
-   ```
+1. Visit [https://lawgpt.tuxn.tech](https://lawgpt.tuxn.tech)
+2. Enter your legal query in the chat interface
+3. Get immediate, context-rich answers based on live legal data
+4. Continue the conversation or clear history to start a new session
 
-2. **Set up the Backend**
+---
 
-   ```powershell
-   cd BACKEND
-   python -m venv env_py10
-   .\env_py10\Scripts\Activate
-   pip install -r requirements.txt
-   ```
+## ✅ Future Enhancements
 
-3. **Set up the Frontend**
+- Upload and parse legal documents (Coming Soon)  
+- Personalized research history and bookmarks  
+- Support for regional legal databases
 
-   ```powershell
-   cd FROUNTEND
-   npm install
-   ```
+---
 
-4. **Start the Development Servers**
+## 💡 Note
 
-   Backend:
+This platform is intended for **educational and research purposes**. While it uses AI and updated law data, always verify legal information with authoritative sources before use in formal legal settings.
 
-   ```powershell
-   cd BACKEND
-   .\env_py10\Scripts\Activate
-   python api_server.py
-   ```
+---
 
-   Frontend:
+## 📫 Feedback & Contributions
 
-   ```powershell
-   cd FROUNTEND
-   npm run dev
-   ```
+We welcome feedback and ideas to improve LawGPT!  
+Feel free to open issues or submit pull requests.
 
-5. **Access the Application**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:8000
+---
 
-## 📁 Project Structure
 
-```
-├── BACKEND/
-│   ├── api_server.py    # FastAPI server implementation
-│   ├── law.py          # Core legal processing logic
-│   ├── requirements.txt # Python dependencies
-│   └── main.py         # Application entry point
-├── FROUNTEND/
-│   ├── src/
-│   │   ├── App.jsx     # Main React component
-│   │   └── App.css     # Styles
-│   ├── package.json    # Node.js dependencies
-│   └── vite.config.js  # Vite configuration
-└── books/              # Directory for legal document PDFs
-```
-
-## ⚙️ Configuration
-
-1. Place your legal PDF documents in the `books/` directory
-2. Environment variables can be set in `.env` file:
-   ```
-   PORT=8000
-   ```
-
-## 🔐 Security
-
-- PDF files and conversation history are excluded from version control
-- Proper error handling for malformed requests
-- Secure API endpoints
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors
-- Built with React + Vite
-- Powered by Python FastAPI
