@@ -11,6 +11,11 @@ load_dotenv()
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# API Keys
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+if not GOOGLE_API_KEY:
+    raise ValueError("GOOGLE_API_KEY environment variable is not set")
+
 # Default PDF path
 DEFAULT_PDF_PATH = os.path.join(BASE_DIR, "ilovepdf_merged.pdf")
 
@@ -32,7 +37,7 @@ API_HOST = "0.0.0.0"
 EMBEDDING_MODEL = "models/embedding-001"
 LLM_MODEL = "gemini-1.5-flash"
 TEMPERATURE = 0.3
-MAX_OUTPUT_TOKENS = 2000
+MAX_TOKENS = 2000
 TOP_K = 40
 TOP_P = 0.95
 

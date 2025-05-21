@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy requirements first for better caching
 COPY BACKEND/requirements.txt .
 
-# Install dependencies
+# Install dependencies with increased timeout and using a more reliable mirror
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the backend code

@@ -180,6 +180,7 @@ function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question }),
+
       });
 
       if (!response.ok) {
@@ -269,6 +270,7 @@ function App() {
   const randomFact = legalFacts[Math.floor(Math.random() * legalFacts.length)];
 
   return (
+    // iscard ? <card />: <textCard messsage={response.messsage}/>
     <motion.div 
       className="app-container"
       initial="hidden"
@@ -297,7 +299,7 @@ function App() {
       <div className="main-content">
         <div className="container">
           {/* Sidebar */}
-          <motion.div 
+          <div 
             className="sidebar"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -335,7 +337,7 @@ function App() {
                 </motion.button>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Chat Container */}
           <motion.div 
