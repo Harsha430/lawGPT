@@ -17,17 +17,11 @@
 
 ---
 
-## 📸 Screenshots
-
-> *(Add screenshots of the interface here once available)*  
-> For example: login screen, chat interface, search response, etc.
-
----
 
 ## 👥 Team
 
 - 👨‍💻 **Ambati Jaya Charan** – Developer  
-- 🛠️ **Venkata Anand Sai Kumar Narla** – Deployment & Infrastructure
+- 🛠️ **Venkata Anand Sai Kumar Narla** – Deployment
 
 ---
 
