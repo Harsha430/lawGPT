@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaBalanceScale, 
@@ -9,11 +10,14 @@ import {
   FaVoteYea,
   FaChevronDown,
   FaChevronUp,
-  FaBook
+  FaBook,
+  FaArrowLeft,
+  FaGavel
 } from 'react-icons/fa';
 import './BasicRightsPage.css';
 
 const BasicRightsPage = () => {
+  const navigate = useNavigate();
   const [expandedCard, setExpandedCard] = useState(null);
 
   const fundamentalRights = [
@@ -183,6 +187,18 @@ const BasicRightsPage = () => {
 
   return (
     <div className="basic-rights-page">
+      <motion.button
+        className="back-button"
+        onClick={() => navigate('/')}
+        whileHover={{ scale: 1.05, x: -5 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <FaArrowLeft /> Back to Home
+      </motion.button>
+
       <motion.div
         className="rights-header"
         initial={{ opacity: 0, y: -30 }}
@@ -190,7 +206,7 @@ const BasicRightsPage = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="header-icon">
-          <FaBook />
+          <FaGavel />
         </div>
         <h1 className="page-title text-gradient">Fundamental Rights of India</h1>
         <p className="page-subtitle">

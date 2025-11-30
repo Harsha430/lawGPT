@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { FaGavel, FaPaperPlane, FaLightbulb, FaBalanceScale, FaUserAlt, FaRobot, FaInfoCircle } from 'react-icons/fa';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { BounceLoader } from 'react-spinners';
@@ -134,6 +135,7 @@ const ParticlesBackground = () => {
 };
 
 function App() {
+  const navigate = useNavigate();
   const [question, setQuestion] = useState('');
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -176,11 +178,20 @@ function App() {
     setQuestion(''); // Clear input immediately for better UX
 
     try {
-      const response = await fetch('http://127.0.0.1:8800/api/ask', {
+      // Build conversation history in the format expected by backend
+      const conversationHistory = history.map(item => ({
+        role: 'user',
+        content: item.question,
+        answer: item.answer
+      }));
+
+      const response = await fetch('https://lawgpt-rxzx.onrender.com/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
-
+        body: JSON.stringify({ 
+          query: question,
+          conversation_history: conversationHistory
+        }),
       });
 
       if (!response.ok) {
@@ -193,7 +204,7 @@ function App() {
       setHistory(prevHistory => 
         prevHistory.map(item => 
           item.id === tempId 
-            ? { ...item, answer: data.answer, loading: false } 
+            ? { ...item, answer: data.response || data.answer, loading: false } 
             : item
         )
       );
@@ -270,7 +281,6 @@ function App() {
   const randomFact = legalFacts[Math.floor(Math.random() * legalFacts.length)];
 
   return (
-    // iscard ? <card />: <textCard messsage={response.messsage}/>
     <motion.div 
       className="app-container"
       initial="hidden"
@@ -299,7 +309,7 @@ function App() {
       <div className="main-content">
         <div className="container">
           {/* Sidebar */}
-          <div 
+          <motion.div 
             className="sidebar"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -322,6 +332,34 @@ function App() {
                     <motion.li whileHover={{ x: 5 }}>Mention timeframes if applicable</motion.li>
                   </ul>
                 </div>
+
+                {/* Basic Rights Section */}
+                <div className="sidebar-section">
+                  <motion.button
+                    className="basic-rights-button"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate('/basic-rights')}
+                    style={{
+                      width: '100%',
+                      padding: '12px 20px',
+                      background: '#2c3e50',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      boxShadow: '0 2px 8px rgba(44, 62, 80, 0.15)'
+                    }}
+                  >
+                    <FaBalanceScale /> Basic Rights
+                  </motion.button>
+                </div>
               </div>
 
               {/* Call to Action Button Container */}
@@ -337,7 +375,7 @@ function App() {
                 </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Chat Container */}
           <motion.div 
@@ -515,5 +553,4 @@ function App() {
 }
 
 export default App;
-
 
