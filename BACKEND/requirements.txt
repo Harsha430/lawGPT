@@ -1,0 +1,13 @@
+pinecone
+python-dotenv
+requests
+pdfplumber
+tqdm
+fastapi
+uvicorn
+pydantic
+sentence-transformers
+langchain-text-splitters
+langchain-google-genai
+langchain-core
+huggingface-hub
